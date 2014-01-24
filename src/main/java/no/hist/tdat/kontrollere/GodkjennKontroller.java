@@ -48,8 +48,10 @@ public class GodkjennKontroller {
             if(koe.getGrupper().get(i).getGruppeID()==Integer.parseInt(nokler[1]) && koe.getGrupper().get(i).getKoe_id()==Integer.parseInt(nokler[0])){
                 gruppe = koe.getGrupper().get(i);
                 System.out.println(gruppe.getKoe_id()+ "I kontroller");
+                System.out.println(koe.getGrupper().get(i).getKoe_id());
             }
         }
+        session.removeAttribute("gruppeFraKoe");
         session.setAttribute("gruppeFraKoe", gruppe);
         return "godkjennOving";
 
@@ -69,8 +71,14 @@ public class GodkjennKontroller {
 
         String emneKode = "ALM805F-A";
 
-        ArrayList<Bruker> studenter = brukerService.hentStudenterMedEmne(emneKode);
-        System.out.println(studenter.get(0));
+        ArrayList<Bruker> studenter = new ArrayList<>();
+        for (int e = 0; e < brukerService.hentStudenterMedEmne(emneKode).size(); e++) {
+            if (brukerService.hentStudenterMedEmne(emneKode).get(e) != null) {
+                Bruker student = brukerService.hentStudenterMedEmne(emneKode).get(e);
+                studenter.add(student);
+            }
+        }
+        session.removeAttribute("studenter");
         session.setAttribute("studenter", studenter);
 
 
@@ -79,17 +87,19 @@ public class GodkjennKontroller {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String naaTid = ft.format(date);
             int gruppeID = koeGrupper.getGruppeID();
-
+            System.out.println(gruppeID);
             for(int i = 0; i < koeGrupper.getMedlemmer().size(); i++) {
                 String brukerMail = koeGrupper.getMedlemmer().get(i).getMail();
 
                 if (koeGrupper.getOvinger().size() == 0) {
                     System.out.println("dette må være en dust..");
+                    brukerService.slettKoeGruppe(koeID, gruppeID);
                 }
 
                 if (koeGrupper.getOvinger().size() == 1) {
                     int enkelOving = koeGrupper.getOvinger().get(0).getOving_id();
                     brukerService.leggTilGodkjentOving(enkelOving, brukerMail, personenSomGodkjenner, naaTid);
+                    brukerService.slettKoeGruppe(koeID, gruppeID);
                 }
 
                 if (koeGrupper.getOvinger().size() >= 2) {
@@ -99,11 +109,12 @@ public class GodkjennKontroller {
                         if (!randomNummerLol.equals("") && randomNummerLol != null) {
                             int ovingsID = koeGrupper.getOvinger().get(j).getOving_id();
                             brukerService.leggTilGodkjentOving(ovingsID, brukerMail, personenSomGodkjenner, naaTid);
+                            brukerService.slettKoeGruppe(koeID, gruppeID);
+
                         }
                     }
                 }
             }
-            brukerService.slettKoeGruppe(koeID, gruppeID);
 
             return "koOversikt";
         }
@@ -114,8 +125,9 @@ public class GodkjennKontroller {
         }
 
         if (leggTilOving != null){
-            System.out.println(studenter.get(0));
-            System.out.println("heidinTULLING");
+           /* for (int i = 0; i < studenter.size(); i++) {
+                System.out.println("." + studenter.get(i) + ".");
+            }*/
         }
         return "godkjentOving";
     }

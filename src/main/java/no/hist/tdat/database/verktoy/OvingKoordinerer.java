@@ -25,11 +25,23 @@ public class OvingKoordinerer implements RowMapper<Oving>{
     public Oving mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Oving oving = new Oving();
         oving.setOvingnr(resultSet.getInt("oving_nr"));
-        if(resultSet.getInt("godkjent")>0) {
-            oving.setGodkjent( resultSet.getInt("godkjent")>0);
+        oving.setOvingid(resultSet.getInt("oving_id"));
+
+        if(kolonneFinnes(resultSet,"godkjent_av")) {
+            oving.setGodkjent(true);
             oving.setGodkjentAv(resultSet.getString("godkjent_av"));
             oving.setGodkjentTid(resultSet.getDate("godkjent_tid"));
         }
         return oving;
+    }
+
+    private boolean kolonneFinnes(ResultSet rs, String column) {
+        try {
+            int hei = rs.findColumn(column);
+            return true;
+        }
+        catch (SQLException sqlex){
+        }
+        return false;
     }
 }

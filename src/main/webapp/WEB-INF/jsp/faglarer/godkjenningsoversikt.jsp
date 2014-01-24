@@ -55,12 +55,21 @@
             <td><c:out value="${pers.fornavn}"/>&nbsp;<c:out value="${pers.etternavn}"/></td>
 
             <td>
-
-                <c:forEach var="ovng" items="${pers.emne[0].delemner[0].studentovinger}">
-                hei
+                <c:forEach var="ovng" items="${pers.emne[0].delemner[0].studentovinger}" varStatus="nr">
+                    <c:choose>
+                        <c:when test="${ovng.godkjent}">
+                            <button class='btn btn-success btn-sm active' title="Godkjent av ${ovng.godkjentAv} ${ovng.godkjentTid}">
+                                    ${ovng.ovingnr}
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <button class='btn btn-danger btn-sm active' title="Ikke godkjent">
+                                    ${ovng.ovingnr}
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
             </td>
-
         </tr>
     </c:forEach>
     </tbody>

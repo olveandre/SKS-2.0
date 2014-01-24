@@ -3,6 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/src/main/java/no/hist/tdat/database/DatabaseConnector.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/java/no/hist/tdat/kontrollere/EndreStudentKontroller.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/main/java/no/hist/tdat/kontrollere/GodkjenningsoversiktKontroller.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/java/no/hist/tdat/kontrollere/NavigasjonsKontroller.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/faglarer/endreStudent.jsp" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/jsp/faglarer/endreValgtStudent.jsp" charset="ISO-8859-1" />

@@ -66,29 +66,15 @@ public class KoeKontroller {
 
     @RequestMapping(value = "StillIKo.htm", method = RequestMethod.POST)
     public String StillIKo(HttpServletRequest request, @Valid @ModelAttribute("koegrupper") KoeGrupper koegrupper, Model model, BindingResult error, HttpSession session) {
-        if (error.hasErrors()) {
-            return "settIKo";
-        }
+
         int delemneNr = Integer.parseInt(request.getParameter("delemneNr"));    //Index i bruker-objektet, IKKE i DB
         int emnenr = Integer.parseInt(request.getParameter("emneNr"));          //Index i bruker-objektet, IKKE i DB
         innloggetBruker = (Bruker) session.getAttribute("innloggetBruker");
         Emne emne = innloggetBruker.getEmne().get(emnenr);
         DelEmne delEmne = emne.getDelemner().get(delemneNr);
         koegrupper.setKoe_id(delEmne.getKoe_id());
-        ArrayList<Bruker> medlemmer = new ArrayList<>();
-        medlemmer.add(innloggetBruker);
-        if(koegrupper.getMedlemmer()!=null){
-            for(int i = 0; i<koegrupper.getMedlemmer().size(); i++){
-                medlemmer.add(koegrupper.getMedlemmer().get(i));
-            }
-        }
-        koegrupper.setMedlemmer(medlemmer);
-        String oving = "";
-        for(int i = 0; i<koegrupper.getOvingnr().size(); i++){
-            oving = "Øving " + koegrupper.getOvingnr().get(i) + ", ";
-        }
-        koe_service.leggTilIKo(koegrupper, delEmne, oving);
-        //return "settIKo";
+
+        //Lager de nødvendige attributtene;
         int koeId = delEmne.getKoe_id();
         Koe koe = new Koe();
         koe.setGrupper(koe_service.getKoe(koeId));
@@ -97,11 +83,42 @@ public class KoeKontroller {
         DelEmne denne = koe_service.hentDelEmneStatus(koeId);
         delEmne.setKoe_status(denne.isKoe_status());
         ArrayList<KoeGrupper> grupper = koe.getGrupper();
+        ArrayList<Oving> oving = delEmne.getStudentovinger();
+        ArrayList<Oving> ikkeGodkjent = new ArrayList<Oving>();
+        for(int i = 0; i<oving.size(); i++){
+            if(!oving.get(i).isGodkjent()){
+                ikkeGodkjent.add(oving.get(i));
+            }
+        }
+        //Attributter for settIKo
+        model.addAttribute("oving", ikkeGodkjent);
+        model.addAttribute("plassering", koe_service.getPlasseringer());
+        //Attributter for koOversikt
         model.addAttribute("emneIndex",emnenr);
         model.addAttribute("delEmneIndex", delemneNr);
         model.addAttribute("koe", koe);
         model.addAttribute("grupper", grupper);
         model.addAttribute("delEmne", delEmne);
-        return "koOversikt";
+        if (error.hasErrors()) {
+            return "settIKo";
+        }else if(koegrupper.getSitteplass().equals("tom")){
+            model.addAttribute("melding", "Du må velge sitteplass!");
+            return "settIKo";
+        }
+
+        ArrayList<Bruker> medlemmer = new ArrayList<>();
+        medlemmer.add(innloggetBruker);
+        if(koegrupper.getMedlemmer()!=null){
+            for(int i = 0; i<koegrupper.getMedlemmer().size(); i++){
+                medlemmer.add(koegrupper.getMedlemmer().get(i));
+            }
+        }
+        koegrupper.setMedlemmer(medlemmer);
+        String ovingString = "";
+        for(int i = 0; i<koegrupper.getOvingnr().size(); i++){
+            ovingString = "Øving " + koegrupper.getOvingnr().get(i) + ", ";
+        }
+        koe_service.leggTilIKo(koegrupper, delEmne, ovingString);
+        return "settIKo";
     }
 }

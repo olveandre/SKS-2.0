@@ -1227,7 +1227,6 @@
     <table name="oving_brukere" schema="" catalog="sks" type="TABLE">
       <column name="oving_id" sqlType="INT" length="10" precision="0" nullable="false" jdbcType="4"/>
       <column name="mail" sqlType="VARCHAR" length="255" precision="0" nullable="false" jdbcType="12"/>
-      <column name="godkjent" sqlType="TINYINT" length="3" precision="0" nullable="false" jdbcType="-6"/>
       <column name="godkjent_av" sqlType="VARCHAR" length="255" precision="0" nullable="true" jdbcType="12"/>
       <column name="godkjent_tid" sqlType="TIMESTAMP" length="19" precision="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
       <primary-key name="PRIMARY" columns="oving_id,mail"/>

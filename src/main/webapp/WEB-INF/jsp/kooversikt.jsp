@@ -26,7 +26,7 @@
     </h3>
 
     <div class="input-group">
-        <c:if test="${sessionScope.innloggetBruker.emne[emneIndex].foreleser==0}">
+        <c:if test="${sessionScope.innloggetBruker.emne[emneIndex].foreleser==0 && delEmne.koe_status && !sessionScope.koe.inneholderBruker(sessionScope.innloggetBruker)}">
             <form action="settIKo.htm" onsubmit="mysubmit()" method="POST">
                 <input type="hidden" name="emneNr" id="emneNr"/>
                 <input type="hidden" name="delemneNr" id="delemneNr"/>

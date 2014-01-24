@@ -155,6 +155,21 @@ public class KoeGrupper {
         this.ovingnr = ovingnr;
     }
 
+
+    /**
+     * Hvis to grupper har samme gruppeleder ( index 0 av medlemmer ) er de like
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        Bruker temp = ((KoeGrupper)obj).getMedlemmer().get(0);
+        if(this.medlemmer.get(0).equals(temp)){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "KoeGrupper{" +

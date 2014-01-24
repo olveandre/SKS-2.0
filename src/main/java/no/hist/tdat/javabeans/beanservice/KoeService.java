@@ -67,6 +67,8 @@ public class KoeService {
         return databaseConnector.delemneIKoe();
     }
 
+
+
     public String genererStartStopKnapp(DelEmne delEmne){
         int koe_id = delEmne.getKoe_id();
         String output ="";
@@ -108,7 +110,14 @@ public class KoeService {
                 output+="<tr>"
                 +"<td>"+gruppe.getKlokkeslett()+"</td>";
             }
-        output+="<td>"+gruppe.getMedlemmer().get(0).getFornavn()+" "+gruppe.getMedlemmer().get(0).getEtternavn()+"</td>"
+        output+="<td>";
+        if(gruppe.getMedlemmer().size()==1){
+            output+="<span class='glyphicon glyphicon-user'></span>";
+        }
+        if(gruppe.getMedlemmer().size()>1){
+         output+="<span class='iconContainer'></span>";
+        }
+        output+=gruppe.getMedlemmer().get(0).getFornavn()+" "+gruppe.getMedlemmer().get(0).getEtternavn()+"</td>"
         +"<td>"+gruppe.getOvingerIString()+"</td>"
         +"<td>"+gruppe.getKommentar()+"</td>"
         +"<td>"+gruppe.getSitteplass()+", bord "+gruppe.getBordnr()+"</td>"
@@ -119,7 +128,7 @@ public class KoeService {
                 +"onclick=\"velgGruppeFraKoe(this.id)\"><i class=\"glyphicon glyphicon-edit\"></i>"
                 +"</button>";
         }
-            if(innloggetBruker.getRettighet()==3){
+            if(innloggetBruker.getRettighet()==3 && koe.getGrupper().get(i).getMedlemmer().get(0).equals(innloggetBruker)){
         output+=" <button class='btn btn-warning' data-task='edit' title='Endre &oslash;vinger'"
             +"onclick='endreBruker(this.parentNode.id)'><i class='glyphicon glyphicon-edit'></i>"
             +"</button>"

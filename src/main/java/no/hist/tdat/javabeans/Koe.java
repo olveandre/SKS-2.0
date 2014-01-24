@@ -41,7 +41,23 @@ public class Koe {
     public void setAapen(boolean aapen) {
         this.aapen = aapen;
     }
+    /**
+     * sjekker om køen inneholder en gruppe som inneholder brukeren.
+     * @param bruker
+     * @return
+     */
 
+    public boolean inneholderBruker(Bruker bruker){
+        for(int i=0;i<this.getGrupper().size();i++){
+            for (int j = 0; j < this.getGrupper().get(i).getMedlemmer().size(); j++) {
+                Bruker bruker1 = this.getGrupper().get(i).getMedlemmer().get(j);
+                if(bruker.equals(bruker1)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public String toString() {
         return "Koe{" +

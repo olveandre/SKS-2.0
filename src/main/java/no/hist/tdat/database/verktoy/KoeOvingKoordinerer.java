@@ -24,7 +24,7 @@ public class KoeOvingKoordinerer implements RowMapper<Oving>{
     public Oving mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Oving oving = new Oving();
         oving.setOvingnr(resultSet.getInt("oving_nr"));
-        oving.setOving_id(resultSet.getInt("oving_id"));
+        oving.setOvingid(resultSet.getInt("oving_id"));
         return oving;
     }
 }

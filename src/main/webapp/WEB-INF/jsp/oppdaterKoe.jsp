@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <table class="table table-hover" >
             <thead>
             <tr>
@@ -25,7 +26,15 @@
                             >
                             <td><c:out value="${koegrupper.klokkeslett}"/></td>
                         </c:if>
-                <td><c:out value="${koegrupper.medlemmer[0].fornavn}"/> <c:out
+                <td>
+                    <c:if test="${fn:length(koegrupper.medlemmer)==1}">
+                        <span class="glyphicon glyphicon-user"></span>
+                    </c:if>
+                    <c:if test="${fn:length(koegrupper.medlemmer)>1}">
+                        <span class="iconContainer"></span>
+                    </c:if>
+
+                    <c:out value="${koegrupper.medlemmer[0].fornavn}"/> <c:out
                         value="${koegrupper.medlemmer[0].etternavn}"/></td>
                 <td><c:out value="${koegrupper.getOvingerIString()}"/></td>
                 <td><c:out value="${koegrupper.kommentar}"/></td>
@@ -37,7 +46,7 @@
                                     onclick="velgGruppeFraKoe(this.id)"><i class="glyphicon glyphicon-edit"></i>
                             </button>
                         </c:if>
-                        <c:if test="${sessionScope.innloggetBruker.rettighet==3}">
+                        <c:if test="${sessionScope.innloggetBruker.rettighet==3 && koegrupper.medlemmer[0].equals(sessionScope.innloggetBruker)}">
                             <button class="btn btn-warning" data-task="edit" title="Endre &oslash;vinger"
                                     onclick="endreBruker(this.parentNode.id)"><i class="glyphicon glyphicon-edit"></i>
                             </button>

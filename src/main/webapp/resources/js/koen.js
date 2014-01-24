@@ -1,25 +1,23 @@
-function hentKoeStudent(koe_id){
+function hentKoeStudent(koe_id) {
 
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            document.getElementById("page-wrapper").innerHTML = xmlhttp.responseText;
         }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function(){
-            if (xmlhttp.readyState==4 && xmlhttp.status==200){
-                document.getElementById("page-wrapper").innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("POST","/koOversikt.htm",true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("koeid=" + koe_id);
+    }
+    xmlhttp.open("POST", "/koOversikt.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("koeid=" + koe_id);
 }
 
-function setKoeId(num){
-    document.getElementById('hiddenKoe').value =num;
+function setKoeId(num) {
+    document.getElementById('hiddenKoe').value = num;
 }
 
 var delemnenr;      //Index i bruker-objektet, IKKE i DB
@@ -27,19 +25,19 @@ var emnenr;         //Index i bruker-objektet, IKKE i DB
 function mysubmit() {
     var delemneNrField = document.getElementById("delemneNr");  //Index i bruker-objektet, IKKE i DB
     var emneNrField = document.getElementById("emneNr");        //Index i bruker-objektet, IKKE i DB
-    delemneNrField.value=delemnenr;
-    emneNrField.value=emnenr;
-    }
+    delemneNrField.value = delemnenr;
+    emneNrField.value = emnenr;
+}
 
-function sjekkAktivKoe(status){
+function sjekkAktivKoe(status) {
     alert(status);
 
-    if(status){
+    if (status) {
         document.getElementById("stillIKo").disabled = false;
     }
 }
-function startStoppKoe(koe_id){
-    var counter=0;
+function startStoppKoe(koe_id) {
+    var counter = 0;
     var knapp = document.getElementById("startStoppKnapp");
     var statusDiv = document.getElementById("koeStatus");
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -52,13 +50,13 @@ function startStoppKoe(koe_id){
 
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
-            if(knapp.value=="Stopp sks" && counter ==0){
-                statusDiv.innerHTML="Deaktivert";
-                knapp.value="Start sks";
+            if (knapp.value == "Stopp sks" && counter == 0) {
+                statusDiv.innerHTML = "Deaktivert";
+                knapp.value = "Start sks";
                 knapp.className = "btn btn-sm btn-success";
-            }else{
-                statusDiv.innerHTML="Aktivert";
-                knapp.value="Stopp sks";
+            } else {
+                statusDiv.innerHTML = "Aktivert";
+                knapp.value = "Stopp sks";
                 knapp.className = "btn btn-sm btn-danger";
             }
             counter++;
@@ -68,7 +66,7 @@ function startStoppKoe(koe_id){
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("KoeIndex=" + koe_id);
 }
-function settIKo(koe_id){
+function settIKo(koe_id) {
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
     }
@@ -85,7 +83,7 @@ function settIKo(koe_id){
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     }
 }
-function StillIKo(emne_id){
+function StillIKo(emne_id) {
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
     }
@@ -102,27 +100,27 @@ function StillIKo(emne_id){
 
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     }
-   // oppdaterKoe();
+    // oppdaterKoe();
 }
 
 
-   /* function oppdaterKoe() {
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function () {
-        alert("READYSTATE: "+xmlhttp.readyState+"\nSTATUS: "+xmlhttp.status);
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("koeTabell").innerHTML=xmlhttp.responseText;
-        }
-    }
-        xmlhttp.open("POST", "/oppdaterKoe.htm", true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("koelol=1");
-}*/
+/* function oppdaterKoe() {
+ if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+ xmlhttp = new XMLHttpRequest();
+ }
+ else {// code for IE6, IE5
+ xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+ }
+ xmlhttp.onreadystatechange = function () {
+ alert("READYSTATE: "+xmlhttp.readyState+"\nSTATUS: "+xmlhttp.status);
+ if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+ document.getElementById("koeTabell").innerHTML=xmlhttp.responseText;
+ }
+ }
+ xmlhttp.open("POST", "/oppdaterKoe.htm", true);
+ xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+ xmlhttp.send("koelol=1");
+ }*/
 function visBilde(sitteplass) {
 
     switch (sitteplass.value) {
@@ -143,57 +141,63 @@ function visBilde(sitteplass) {
     }
 
 }
-function hentBord(formSelectElement){
-    var value =formSelectElement.options[formSelectElement.selectedIndex].id;
+function hentBord(formSelectElement) {
+    var value = formSelectElement.options[formSelectElement.selectedIndex].id;
     var selectElement = document.getElementById("bordnr");
-    selectElement.options.length=0; // clearer forrige verdier.
-    selectElement.disabled = false;
+    selectElement.options.length = 0; // clearer forrige verdier.
     var option = "";
-    for(var i = 1;i<=value;i++){
-        option = document.createElement('option');
-        option.appendChild(document.createTextNode(i));
-        option.value= i;
-        selectElement.appendChild(option);
+    if (value === "tom") {
+        selectElement.disabled = true;
+    }else{
+        selectElement.disabled = false;
+        for (var i = 1; i <= value; i++) {
+            option = document.createElement('option');
+            option.appendChild(document.createTextNode(i));
+            option.value = i;
+            selectElement.appendChild(option);
+        }
     }
+}
+function tilKoe(){
+    var form =document.getElementById("formStillIKo");
+    form.action = "/koOversikt.htm";
+    document.getElementById("emneNr").value=emnenr;
+    document.getElementById("delemneNr").value=delemnenr;
+    form.submit();
 }
 //Fjernet visadmin, statuskoe og var statusknapp.
-function oppdaterkoen(){
-    if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
+function oppdaterkoen() {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
     } else {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.onreadystatechange=function(){
-        if (xmlhttp.readyState==4 && xmlhttp.status==200){
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
-            document.getElementById("koetabell").innerHTML=xmlhttp.responseText;
+            document.getElementById("koetabell").innerHTML = xmlhttp.responseText;
         }
     }
-    xmlhttp.open("POST","/oppdaterKoe.htm",true);
+    xmlhttp.open("POST", "/oppdaterKoe.htm", true);
     //xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("koe_id=" + "1");
 }
 
-function startStoppKoeKnapp(){
-    if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
+function startStoppKoeKnapp() {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
     } else {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.onreadystatechange=function(){
-        if (xmlhttp.readyState==4 && xmlhttp.status==200){
-            document.getElementById("startStoppKoe").innerHTML=xmlhttp.responseText;
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            document.getElementById("startStoppKoe").innerHTML = xmlhttp.responseText;
         }
     }
-    xmlhttp.open("POST","/startStoppKoe.htm",true);
+    xmlhttp.open("POST", "/startStoppKoe.htm", true);
     //xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("koe_id=" + "1");
 }
-
-
-
 
 
 //Velg gruppe fra kø

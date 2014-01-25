@@ -116,24 +116,19 @@ public class EmneService {
      */
     public ArrayList<Emne> finnEmne(String input) {
         return databaseConnector.finnEmne(input);
-    }
-
+    
     public boolean slettEmne(String emnekode){
         return databaseConnector.slettEmne(emnekode);
     }
-
     public boolean oppdaterEmne(String emnekode, Emne emne) {
         return databaseConnector.oppdaterEmne(emne, emnekode);
     }
-
     public boolean opprettOving(int i, DelEmne delemne) {
         return databaseConnector.opprettOving(i, delemne);
     }
-
     public boolean lagRegler(String regler, int ant, DelEmne delemne) {
         return databaseConnector.legRegler(regler, ant, delemne);
     }
-
     public boolean slettDelEmne (String emnekode, String delEmneNr){
         return databaseConnector.slettDelEmne(emnekode, delEmneNr);
     }

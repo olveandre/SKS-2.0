@@ -50,14 +50,14 @@
     <div class="btn-group">
         <button type="submit" class="btn btn-success" name="godkjennKnapp"><i class="glyphicon glyphicon-ok"></i> Godkjenn</button>
 
-        <button type="leggtil" class="btn btn-primary" data-toggle="modal" data-target="#leggTilStudentModal"><i class="glyphicon glyphicon-user"></i> Legg til studenter
+        <button type="submit" class="btn btn-primary" name="leggTilStudentModal" data-toggle="modal" data-target="#leggTilStudentModal"><i class="glyphicon glyphicon-user"></i> Legg til studenter
         </button>
 
         <button type="submit" class="btn btn-info" name="endreOvingerKnapp"><i
                 class="glyphicon glyphicon-plus"></i> Endre øvinger
         </button>
 
-        <button type="tilbake" class="btn btn-danger" name="tilbakeKnapp">Lukk</button>
+        <button type="submit" class="btn btn-danger" name="tilbakeKnapp">Lukk</button>
     </div>
         <div class="modal fade" id="leggTilStudentModal" tabindex="-1" role="dialog" aria-labelledby="leggTilStudent"
              aria-hidden="true">
@@ -72,7 +72,7 @@
                             <select class="form-control" name="dropdown" id="leggTilStudentIGruppe">
 
                                 <option value="ingenValgte">Ingen valgte</option>
-                                <c:forEach var="brukerValgt" items="${studenter}" varStatus="status">
+                                <c:forEach var="brukerValgt" items="${flereStudenter}" varStatus="status">
                                 <option value="${brukerValgt.mail}">${brukerValgt.etternavn}, ${brukerValgt.fornavn}</option>
                                 </c:forEach>
 

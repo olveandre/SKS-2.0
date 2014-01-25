@@ -2,6 +2,7 @@ package no.hist.tdat.database;
 
 import no.hist.tdat.database.verktoy.*;
 import no.hist.tdat.javabeans.*;
+import no.hist.tdat.javabeans.beanservice.EmneService;
 import no.hist.tdat.koe.KoeBruker;
 import no.hist.tdat.kontrollere.GodkjennKontroller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,16 +85,29 @@ public class DatabaseConnector {
 
     //Brukes til å godkjenn gruppe hent bruker shiiet
     private final String opprettGodkjentOvingSQL = "INSERT INTO oving_brukere (oving_id, mail, godkjent_av, godkjent_tid) VALUE (?,?,?,?)";
-    private final String fjernKoeGruppeFraKoeSQL = "DELETE FROM koe_gruppe WHERE gruppe_id = ? AND koe_id = ?";
+    private final String fjernKoeGruppeFraKoeSQL = "DELETE FROM koe_gruppe WHERE koe_id = ? AND gruppe_id = ?";
     //SQL SETNING som henter ALLE studenter med et gitt emne. sortert etter etternavn!
     private final String hentStudentMedEmneSQL = "SELECT * FROM brukere, emner_brukere WHERE brukere.mail = emner_brukere.mail  AND emner_brukere.emnekode = ? AND brukere.aktiv = 1 AND brukere.rettighet_id = 3 ORDER BY brukere.etternavn";
+    private final String hentEmnekodeMedKoeIdSQL = "SELECT * FROM emner, delemne, koe WHERE koe.koe_id = delemne.koe_id AND delemne.emnekode = emner.emnekode AND koe.koe_id = ?";
+    private final String hentEmnekodeMedKoeId2SQL = "SELECT * FROM emner, delemne WHERE delemne.emnekode = emner.emnekode AND delemne.koe_id = ?";
 
 
     private final String hentOvingerSQL = "SELECT * FROM oving WHERE emnekode = (SELECT emnekode FROM delemne WHERE delemnenavn = ?) AND delemne_nr = (SELECT delemne_nr FROM delemne WHERE delemnenavn = ?)";
     private final String hentEmneSQL = "SELECT * FROM emner WHERE emnekode = (SELECT emnekode FROM delemne WHERE delemnenavn = ?)";
     private final String sjekkGodkjentSQL = "SELECT * FROM oving NATURAL JOIN oving_brukere WHERE oving_brukere.mail = ? AND oving.emnekode = (SELECT emnekode FROM delemne WHERE delemnenavn = ?) AND oving.delemne_nr = (SELECT delemne_nr FROM delemne WHERE delemnenavn = ?)";
+
     @Autowired
     private DataSource dataKilde; //Felles datakilde for alle sp�rringer.
+
+    public ArrayList<Emne> hentEmneKodeMedKoeId(int KoeIDOLOLOL) {
+        JdbcTemplate con = new JdbcTemplate(dataKilde);
+        List<Emne> emneloList = con.query(hentEmnekodeMedKoeIdSQL, new EmneKoordinerer(), KoeIDOLOLOL);
+        ArrayList<Emne> output = new ArrayList<>();
+        for (Emne denne : emneloList) {
+            output.add(denne);
+        }
+        return output;
+    }
 
     /**
      *

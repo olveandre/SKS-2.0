@@ -23,8 +23,8 @@
       <user-password>dfe4dfcbdfccdf9cdf9cdff3df93dfdadfdfdfc9dfe7dfc0dfe2df98dfc8dfe0</user-password>
       <driver-properties>
         <property name="zeroDateTimeBehavior" value="convertToNull" />
-        <property name="DBNAME" value="sks" />
         <property name="tinyInt1isBit" value="false" />
+        <property name="DBNAME" value="sks" />
       </driver-properties>
       <libraries />
     </data-source>

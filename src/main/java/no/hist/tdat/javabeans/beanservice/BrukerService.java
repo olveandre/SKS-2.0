@@ -2,6 +2,7 @@ package no.hist.tdat.javabeans.beanservice;
 
 import no.hist.tdat.database.DatabaseConnector;
 import no.hist.tdat.javabeans.Bruker;
+import no.hist.tdat.javabeans.Emne;
 import no.hist.tdat.javabeans.Oving;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -185,5 +186,9 @@ public class BrukerService {
     public ArrayList<Bruker> hentStudenterMedEmne (String emneKode) {
         ArrayList<Bruker> studenter = databaseConnector.hentStudenterMedGittEmne(emneKode);
         return studenter;
+    }
+
+    public ArrayList<Emne> hentEmnekodeMedBareKoeID(int KoeIDLOL) {
+        return databaseConnector.hentEmneKodeMedKoeId(KoeIDLOL);
     }
 }

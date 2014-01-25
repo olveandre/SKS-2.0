@@ -1,9 +1,6 @@
 package no.hist.tdat.kontrollere;
 
-import no.hist.tdat.javabeans.Bruker;
-import no.hist.tdat.javabeans.DelEmne;
-import no.hist.tdat.javabeans.Koe;
-import no.hist.tdat.javabeans.KoeGrupper;
+import no.hist.tdat.javabeans.*;
 import no.hist.tdat.javabeans.beanservice.BrukerService;
 import no.hist.tdat.javabeans.beanservice.EmneService;
 import no.hist.tdat.javabeans.beanservice.KoeService;
@@ -13,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import sun.management.resources.agent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -37,25 +35,44 @@ public class GodkjennKontroller {
     @Autowired
     KoeService koeservice;
 
+
+
+
     @RequestMapping(value = "/hentUtKoGruppe.htm", method = RequestMethod.POST)
     public String hentUtKoGruppe(@ModelAttribute("koeGrupper") KoeGrupper koeGrupper, Model modell, HttpServletRequest request, HttpSession session){
-
         Koe koe = (Koe)session.getAttribute("koe");
         String gruppeId = request.getParameter("gruppeid");
         String koeId= request.getParameter("koeid");
         //String[] nokler = gruppeNokkler.split(":");
 
         KoeGrupper gruppe = null;
+        int koeID = koe.getKoeId();
+
         for (int i = 0; i <koe.getGrupper().size() ; i++) {
             if(koe.getGrupper().get(i).getGruppeID()==Integer.parseInt(gruppeId) && koe.getGrupper().get(i).getKoe_id()==Integer.parseInt(koeId)){
                 gruppe = koe.getGrupper().get(i);
-                session.removeAttribute("gruppeFraKoe");
-                session.setAttribute("gruppeFraKoe", gruppe);
-                return "godkjennOving";
             }
         }
+
+        ArrayList<Emne> emner = brukerService.hentEmnekodeMedBareKoeID(koeID);
+        Emne detteEmne = null;
+        for (int a = 0; a < emner.size(); a++) {
+            if (emner.size() == 1) {
+                detteEmne = emner.get(a);
+            }
+        }
+        String emneKode = detteEmne.getEmneKode();
+        ArrayList<Bruker> mangeStudenter = new ArrayList<>();
+        for (int e = 0; e < brukerService.hentStudenterMedEmne(emneKode).size(); e++) {
+            Bruker student = brukerService.hentStudenterMedEmne(emneKode).get(e);
+            mangeStudenter.add(student);
+        }
+
+        session.removeAttribute("flereStudenter");
+        session.setAttribute("flereStudenter", mangeStudenter);
         session.removeAttribute("gruppeFraKoe");
         session.setAttribute("gruppeFraKoe", gruppe);
+
         return "godkjennOving";
 
     }
@@ -65,6 +82,7 @@ public class GodkjennKontroller {
         String godkjenn = request.getParameter("godkjennKnapp");
         String leggTilStudenter = request.getParameter("leggTilStundeterKnapp");
         String leggTilOving = request.getParameter("endreOvingerKnapp");
+        String tilbake = request.getParameter("tilbakeKnapp");
 
         KoeGrupper koeGrupper = (KoeGrupper)session.getAttribute("gruppeFraKoe");
         Bruker heibruker = (Bruker)session.getAttribute("innloggetBruker");
@@ -72,17 +90,12 @@ public class GodkjennKontroller {
         String personenSomGodkjenner = heibruker.getMail();
         int koeID = koeGrupper.getKoe_id();
 
-        String emneKode = "ALM805F-A";
-
-        ArrayList<Bruker> studenter = brukerService.hentStudenterMedEmne(emneKode);
-        System.out.println(studenter.get(0));
-        session.setAttribute("studenter", studenter);
-
 
         if (godkjenn != null) {
             Date date = new Date(); //2000-01-01 13:37:00
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String naaTid = ft.format(date);
+
             int gruppeID = koeGrupper.getGruppeID();
 
             for(int i = 0; i < koeGrupper.getMedlemmer().size(); i++) {
@@ -97,7 +110,7 @@ public class GodkjennKontroller {
                     brukerService.leggTilGodkjentOving(enkelOving, brukerMail, personenSomGodkjenner, naaTid);
                 }
 
-                if (koeGrupper.getOvinger().size() >= 2) {
+                if (koeGrupper.getOvinger().size() > 1) {
                     String[] ovingerSomSkalGodkjennes = koeGrupper.getOvingerIString().split(",");
                     for(int j = 0; ovingerSomSkalGodkjennes.length > j ; j++) { //Går igjennom hver oving
                         String randomNummerLol = ovingerSomSkalGodkjennes[j].trim();
@@ -109,20 +122,21 @@ public class GodkjennKontroller {
                 }
             }
             brukerService.slettKoeGruppe(koeID, gruppeID);
-
             return "koOversikt";
         }
 
         if (leggTilStudenter != null) {
-
             //koeGrupper.getMedlemmer().add(BRUKEREN
         }
 
         if (leggTilOving != null){
-            System.out.println(studenter.get(0));
-            System.out.println("heidinTULLING");
+            System.out.println("hei");
         }
-        return "godkjentOving";
+
+        if (tilbake != null){
+            return "koOversikt";
+        }
+        return "godkjennOving";
     }
 }
 

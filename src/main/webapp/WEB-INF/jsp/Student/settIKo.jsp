@@ -11,6 +11,7 @@
 
     <form:form action="StillIKo.htm" onsubmit='mysubmit()' modelAttribute="koegrupper" method="post" id="formStillIKo">
         <p style="color: red"><strong>${melding}</strong></p>
+        <p style="color: green"><strong> ${Vellykket}</strong></p>
 
         <div class="form-group">
             <label for="sitteplass">Sitteplass:</label>
@@ -63,11 +64,12 @@
 
         <div class="modal-footer">
 
-            <input onclick='delemnenr="${delEmneIndex}"; emnenr="${emneIndex}"; tilKoe();/*mysubmit();*/' value="Tilbake"
+            <input onclick='delemnenr="${delEmneIndex}"; emnenr="${emneIndex}"; tilKoe();/*mysubmit();*/'
+                   value="Tilbake"
                    class="btn btn-md btn-danger col-md-5">
 
             <input type="submit" id="leggTil" onclick='delemnenr="${delEmneIndex}"; emnenr="${emneIndex}"'
-                   class="btn btn-md btn-primary col-md-5"  value="Legg til i k&oslash;">
+                   class="btn btn-md btn-primary col-md-5" value="Legg til i k&oslash;">
         </div>
     </form:form>
 </div>

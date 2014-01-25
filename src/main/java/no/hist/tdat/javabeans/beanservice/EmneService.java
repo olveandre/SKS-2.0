@@ -20,7 +20,7 @@ public class EmneService {
 
     public void hentEmner(Bruker bruker) {
        bruker.setEmne(databaseConnector.hentMineEmner(bruker));
-       ArrayList<Emne> emneList  = bruker.getEmne();                           //TODO Ted
+       ArrayList<Emne> emneList  = bruker.getEmne();
        ArrayList<DelEmne> delEmneList;
         ArrayList<Oving> godkjentList;
         ArrayList<Oving> ovingList;
@@ -30,22 +30,13 @@ public class EmneService {
             tempEmne.setDelemner(delEmneList);
             for (int b = 0; b <delEmneList.size(); b++) {   //for hvert delemne pr emne
                 DelEmne tempDelEmne = delEmneList.get(b);
-                System.out.println(tempDelEmne.toString());
-                ovingList=databaseConnector.hentDelEmneOving(tempDelEmne.getNr(), tempEmne.getEmneKode());// TODO ted: sjekk om dette stemmer
+                ovingList=databaseConnector.hentDelEmneOving(tempDelEmne.getNr(), tempEmne.getEmneKode());
                 godkjentList = databaseConnector.hentStudOvinger(bruker,tempEmne,tempDelEmne);
                 Oving tempOving;
                 for (int c = 0; c < godkjentList.size(); c++) {
                     tempOving = godkjentList.get(c);
-                    System.out.println("size: "+(godkjentList.size()+1)+"\nflytter øving nr "+tempOving.getOvingnr());
-
                     tempOving.setGodkjent(true);
                     ovingList.set(tempOving.getOvingnr()-1,tempOving);
-                    //System.out.println("ovingsnr: "+tempOving.getOvingnr()+"\nindex: "+c);
-                }
-                for (int i = 0; i < ovingList.size(); i++) {
-                    System.out.println("index: "+i+"\novinsgnr: "+ovingList.get(i).getOvingnr()+"godkjent?: "+ovingList.get(i).isGodkjent());
-
-
                 }
                 tempDelEmne.setStudentovinger(ovingList);
             }
@@ -106,7 +97,9 @@ public class EmneService {
     public Emne hentEmne(String navn){
         return databaseConnector.hentEmne(navn);
     }
-
+    public Emne hentEmneNavn(String emnekode){
+        return databaseConnector.hentEmneNavn(emnekode);
+    }
     public ArrayList<Oving> hentDelEmneOving(Bruker bruker, Emne emne, DelEmne delEmne){
         return databaseConnector.hentStudOvinger(bruker,emne,delEmne);
     }
@@ -139,5 +132,12 @@ public class EmneService {
 
     public boolean lagRegler(String regler, int ant, DelEmne delemne) {
         return databaseConnector.legRegler(regler, ant, delemne);
+    }
+
+    public boolean slettDelEmne (String emnekode, String delEmneNr){
+        return databaseConnector.slettDelEmne(emnekode, delEmneNr);
+    }
+    public boolean slettEmneansvarlig(String emneKode,String mail){
+        return databaseConnector.slettEmneansvarlig(emneKode, mail);
     }
 }

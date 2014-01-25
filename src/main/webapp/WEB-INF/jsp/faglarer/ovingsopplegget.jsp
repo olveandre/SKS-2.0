@@ -4,8 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<div class="col-md-4">
-    <h1>Sett regler for &oslash;vingsopplegget</h1>
+<div class="col-md-8">
+    <h1>Sett regler for &oslash;vingsopplegget(${delemne.delEmneNavn})</h1>
 
     <form:form method="POST" modelAttribute="delemne" action="ovingsopplegget">
         <h3>Grunnleggende</h3>

@@ -17,7 +17,7 @@
 
     <bean id="tilesConfigurer"
           class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"
-          p:definitions="classpath:tiles.xml"/>
+          p:definitions="/WEB-INF/tiles.xml"/>
 
     <bean id="dataKilde" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -35,4 +35,22 @@
     <bean id="innloggetBruker" class="no.hist.tdat.javabeans.Bruker"/>
 
     <bean id="personerBeans" class="no.hist.tdat.javabeans.PersonerBeans"/>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="username" value="noreplay.sks@gmail.com" />
+        <property name="password" value="jorgeir88" />
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailMail" class="no.hist.tdat.javabeans.utils.MailService">
+        <property name="mailSender" ref="mailSender" />
+    </bean>
+
 </beans>

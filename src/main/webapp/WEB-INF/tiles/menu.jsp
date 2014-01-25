@@ -19,43 +19,42 @@
 
         <ul class="nav navbar-nav navbar-right navbar-user">
             <li class="dropdown user-dropdown">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">${sessionScope.innloggetBruker.fornavn}
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">${sessionScope.innloggetBruker.fornavn}&nbsp;${sessionScope.innloggetBruker.etternavn}
                     <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="minside.htm">Minside</a></li>
                     <li><a href="endrePassord.htm"><i class="fa fa-power-off"></i>Endre Passord</a></li>
-                    <li><a href="loggUt.htm"><i class="fa fa-power-off"></i> Logg ut</a></li>
                     <li class="divider"></li>
+                    <li><a href="loggUt.htm"><i class="fa fa-power-off"></i> Logg ut</a></li>
                 </ul>
             </li>
         </ul>
 
 
-
         <ul class="nav navbar-nav side-nav">
             <c:if test="${sessionScope.innloggetBruker ==null}">
-            <li><a href="/login.htm">Logg inn</a></li>
+                <li><a href="/login.htm">Logg inn</a></li>
             </c:if>
             <c:if test="${sessionScope.innloggetBruker.rettighet<3}">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
-                        Emner <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-            </c:if>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
+                    Emner <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    </c:if>
                     <c:forEach items="${sessionScope.innloggetBruker.emne}" var="emne">
-                        <li><a href="#" title="${emne.emneNavn}" onclick="emnekodeFraMenu(this.id)" id = "${emne.emneKode}">${emne.emneKode}</a></li>
+                        <li><a href="#" title="${emne.emneKode}" onclick="emnekodeFraMenu(this.id)"
+                               id="${emne.emneKode}">${emne.emneNavn}</a></li>
                     </c:forEach>
-
-            <c:if test="${sessionScope.innloggetBruker.rettighet<3}">
-                    </ul>
-                </li>
+                    <c:if test="${sessionScope.innloggetBruker.rettighet<3}">
+                </ul>
+            </li>
             </c:if>
             <c:if test="${sessionScope.innloggetBruker.rettighet<2}">
                 <li><a href="/adminBrukere.htm">Administrer brukere</a></li>
                 <li><a href="/adminFag.htm">Administrer emner</a></li>
             </c:if>
             <c:if test="${sessionScope.innloggetBruker.rettighet<3}">
-                <li><a href="/opprettEmne.htm" >Opprett emne</a></li>
+                <li><a href="/opprettEmne.htm">Opprett emne</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
                         Administrer studenter <b class="caret"></b></a>
@@ -66,8 +65,9 @@
                 </li>
             </c:if>
 
-           <!-- <li><a href="godkjenningsoversikt.htm">Godkjenningsoversikt</a></li> -->
-
+            <c:if test="${sessionScope.innloggetBruker.rettighet>1}">
+                <li><a href="godkjenningsoversikt.htm">Godkjenningsoversikt</a></li>
+            </c:if>
         </ul>
     </div>
     <!-- /.navbar-collapse -->

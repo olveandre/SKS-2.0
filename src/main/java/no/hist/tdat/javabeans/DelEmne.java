@@ -15,6 +15,7 @@ public class DelEmne {
     private String delEmneNavn;
     private String emneKode;
     private int antOvinger;
+    private boolean ovingerBestatt;
 
     public String getDelEmneNavn() {
         return delEmneNavn;
@@ -36,6 +37,14 @@ public class DelEmne {
 
     public void setNr(int nr) {
         this.nr = nr;
+    }
+
+    public boolean isOvingerBestatt() {
+        return ovingerBestatt;
+    }
+
+    public void setOvingerBestatt(boolean b) {
+        this.ovingerBestatt = b;
     }
 
     public String getSemester() {
@@ -64,7 +73,9 @@ public class DelEmne {
 
     public String getOvingsRegler() { return ovingsRegler; }
 
-    public void setOvingsRegler(String ovingsRegler) {this.ovingsRegler = ovingsRegler;}
+    public void setOvingsRegler(String ovingsRegler) {
+        this.ovingsRegler = ovingsRegler;
+    }
 
     public boolean isKoe_status() {
         return koe_status;
@@ -90,6 +101,7 @@ public class DelEmne {
         this.emneKode = emneKode;
     }
 
+
     @Override
     public String toString() {
         return "DelEmne{" +
@@ -102,5 +114,42 @@ public class DelEmne {
                 ", delEmneNavn='" + delEmneNavn + '\'' +
                 ", emneKode='" + emneKode + '\'' +
                 '}';
+    }
+    public void sjekkAntOvinger(ArrayList<Oving> ovinger) {
+        String[] regel = ovingsRegler.split("[|]");
+        //10 7 | 3 5 8 ; 2 | 4 7 ; 1 |
+
+        int antOvinger = Integer.parseInt(regel[0].split(" ")[0]);
+        int kravGodkj = Integer.parseInt(regel[0].split(" ")[1]);
+        int antallGodkj = ovinger.size();
+
+        if (antallGodkj < kravGodkj) {
+            ovingerBestatt = false;
+            return;
+        }
+
+        for (int j = 1; j < regel.length; j++) {
+            String[] regelS = regel[j].split(";");
+            String[] ovingerS = regelS[0].split(" ");
+            int gjort = 0;
+            int krav = Integer.parseInt(regelS[1].trim());
+
+            for (int k = 0; k < ovingerS.length; k++) {
+                if (ovingerS[k] != null && !ovingerS[k].equals("")) {
+                    int krevdOving = Integer.parseInt(ovingerS[k].trim());
+                    for (int i = 0; i < ovinger.size(); i++) {
+                        if (krevdOving == ovinger.get(i).getOvingnr()) {
+                            gjort++;
+                        }
+                    }
+                }
+            }
+            if (gjort < krav) {
+                ovingerBestatt = false;
+                return;
+            }
+        }
+        ovingerBestatt = true;
+
     }
 }

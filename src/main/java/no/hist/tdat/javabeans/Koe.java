@@ -48,11 +48,13 @@ public class Koe {
      */
 
     public boolean inneholderBruker(Bruker bruker){
-        for(int i=0;i<this.getGrupper().size();i++){
-            for (int j = 0; j < this.getGrupper().get(i).getMedlemmer().size(); j++) {
-                Bruker bruker1 = this.getGrupper().get(i).getMedlemmer().get(j);
-                if(bruker.equals(bruker1)){
-                    return true;
+        if(this.getGrupper()!=null){
+            for(int i=0;i<this.getGrupper().size();i++){
+                for (int j = 0; j < this.getGrupper().get(i).getMedlemmer().size(); j++) {
+                    Bruker bruker1 = this.getGrupper().get(i).getMedlemmer().get(j);
+                    if(bruker.equals(bruker1)){
+                        return true;
+                    }
                 }
             }
         }

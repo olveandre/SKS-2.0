@@ -76,5 +76,15 @@ public class Emne {
         }
         return delEmner;
     }
-
+    public String forelesereTilString(){
+        String forelesere = "";
+        for(int i = 0; i<foreleserListe.size(); i++){
+            if(i==0){
+                forelesere += foreleserListe.get(i).getFornavn() + " " + foreleserListe.get(i).getEtternavn();
+            }else{
+                forelesere += ", " + foreleserListe.get(i).getFornavn() + " " + foreleserListe.get(i).getEtternavn();
+            }
+        }
+        return forelesere;
+    }
 }

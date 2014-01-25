@@ -27,6 +27,8 @@ INSERT INTO brukere (mail, rettighet_id, fornavn, etternavn, passord, aktiv)
 VALUES ('anette@mail.com', 1, 'Anette', 'Wrlsen', 'eaaseQasexaseaaseQasexaseaaseQas', 1);
 INSERT INTO brukere (mail, rettighet_id, fornavn, etternavn, passord, aktiv)
 VALUES ('SuperAdmin@mail.com', 1, 'Admin', 'Super', 'eaaseQasexaseaaseQasexaseaaseQas', 1);
+INSERT INTO brukere (mail, rettighet_id, fornavn, etternavn, passord, aktiv)
+VALUES ('gm.larsen@oyvang.org', 1, 'Geir Morten', 'Larsen', 'eaaseQasexaseaaseQasexaseaaseQas', 1);
 
 
 INSERT INTO emner (emnekode, emnenavn) VALUES ('TDAT2001-A', 'Realfag for dataingeniører');
@@ -88,17 +90,17 @@ INSERT INTO koe (aapen) VALUES (0);
 INSERT INTO koe (aapen) VALUES (0);
 
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (1, 'ALM805F-A', 1, 'Politikk', 'H', '10', '1-5:2,6-10:4,1-10:7,6-7:2,2-2:1');
+VALUES (1, 'ALM805F-A', 1, 'Politikk', 'H', '10', '10 3 | 3 4 ; 2 |');
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (2, 'ALM805F-A', 2, 'Kjemi', 'H', '10', '1-10:8');
+VALUES (2, 'ALM805F-A', 2, 'Kjemi', 'H', '20', '20 1 | 5 ; 1 |');
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (3, 'ALM805F-A', 3, 'Økonomi', 'V', '10', '');
+VALUES (3, 'ALM805F-A', 3, 'Økonomi', 'V', '2', '2 1 |');
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (4, 'ALM805F-A', 4, 'Etikk', 'V', '10', '2-2:1,5-5:1,8-8:1');
+VALUES (4, 'ALM805F-A', 4, 'Etikk', 'V', '0', '0 0 |');
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (1, 'TDAT2005-A', 5, 'Algoritmer og datastrukturer', 'H', '10', '1-6:6');
+VALUES (1, 'TDAT2005-A', 5, 'Algoritmer og datastrukturer', 'H', '4', '4 2 | 3 4 ; 2 |');
 INSERT INTO delemne (delemne_nr, emnekode, koe_id, delemnenavn, semester, ant_ovinger, ovingsregler)
-VALUES (1, 'TDAT2003-A', 6, 'Systemutvikling 2 med web-applikasjoner', 'H', '10', '1-6:3');
+VALUES (1, 'TDAT2003-A', 6, 'Systemutvikling 2 med web-applikasjoner', 'H', '1', '1 1 |');
 
 
 INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('ALM805F-A', 'gm@mail.com', 0);
@@ -126,6 +128,7 @@ INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('ALM802F-B', 'anet
 INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('TDAT2001-A', 'grethe@mail.com', 1);
 INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('IINI3006', 'grethe@mail.com', 1);
 INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('ALM805F-A', 'grethe@mail.com', 1);
+INSERT INTO emner_brukere (emnekode, mail, foreleser) VALUES ('ALM805F-A', 'gm.larsen@oyvang.org', 1);
 
 INSERT INTO plassering (plassering_navn, ant_bord) VALUES ('Labben 2.etg', 19);
 INSERT INTO plassering (plassering_navn, ant_bord) VALUES ('Polareal 1.etg', 24);
@@ -190,6 +193,7 @@ INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (1, 'TDAT2005-A', 1);
 INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (2, 'TDAT2005-A', 1);
 INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (3, 'TDAT2005-A', 1);
 INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (4, 'TDAT2005-A', 1);
+INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (1, 'TDAT2003-A', 1);
 
 INSERT INTO gruppe_oving (gruppe_id, koe_id, oving_id) VALUES (1,1,1);
 INSERT INTO gruppe_oving (gruppe_id, koe_id, oving_id) VALUES (1,1,2);
@@ -206,9 +210,9 @@ INSERT INTO gruppe_oving (gruppe_id, koe_id, oving_id) VALUES (6,1,3);
 INSERT INTO delemne_brukere (mail, emnekode, delemne_nr) VALUES ('js@mail.com', 'ALM805F-A', 1);
 
 INSERT INTO oving_brukere (oving_id, mail, godkjent_av, godkjent_tid)
-VALUES (3, 'ob@mail.com', 'Grethe', '2000-01-01 13:37:00');
+VALUES (3, 'ob@mail.com', 'Grethe', '2013-01-01 13:37:00');
 INSERT INTO oving_brukere (oving_id, mail, godkjent_av, godkjent_tid)
-VALUES (4, 'ob@mail.com', 'Anette', '1989-06-30 10:20:21');
+VALUES (4, 'ob@mail.com', 'Anette', '2006-06-30 10:20:21');
 INSERT INTO oving_brukere (oving_id, mail, godkjent_av, godkjent_tid)
-VALUES (6, 'ob@mail.com', 'Jørgen', '2000-12-03 09:40:11');
+VALUES (6, 'ob@mail.com', 'Jørgen', '2013-12-03 09:40:11');
 

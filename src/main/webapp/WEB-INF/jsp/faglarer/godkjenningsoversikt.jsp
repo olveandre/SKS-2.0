@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <script>
     function hentRettEmne(emnekode) {
@@ -9,17 +10,16 @@
             xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
         xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                window.location = "godkjenningsoversikt.htm";
+            }
 
         }
         xmlhttp.open("POST", "hentRiktigEmne", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("emne=" + emnekode);
 
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            //document.getElementById("calendar").innerHTML=xmlhttp.responseText;
-            alert("jara");
-        }
-        window.location = "godkjenningsoversikt.htm";
+
     }
 </script>
 
@@ -41,6 +41,12 @@
     </div>
 </h2>
 
+<c:if test="${sessionScope.innloggetBruker.rettighet==2}">
+    <form:form action="visAlleMedBestatt" method="post">
+        <input class="btn btn-info" type="submit" value="Vis liste med alle eksamensklare">
+    </form:form>
+</c:if>
+
 <table class="col-lg-10 table table-striped">
     <thead>
     <tr>
@@ -52,13 +58,20 @@
     <tbody>
     <c:forEach var="pers" items="${sessionScope.ovingsoversikt}" varStatus="personTeller">
         <tr>
-            <td><c:out value="${pers.fornavn}"/>&nbsp;<c:out value="${pers.etternavn}"/></td>
+            <td><c:out value="${pers.fornavn}"/>&nbsp;<c:out value="${pers.etternavn}"/>&nbsp;
+                <c:if test="${pers.emne[0].delemner[0].ovingerBestatt}">
+                    <button class="btn btn-success btn-sm active" title="Kandidat er klar til eksamen">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                </c:if>
+            </td>
 
             <td>
                 <c:forEach var="ovng" items="${pers.emne[0].delemner[0].studentovinger}" varStatus="nr">
                     <c:choose>
                         <c:when test="${ovng.godkjent}">
-                            <button class='btn btn-success btn-sm active' title="Godkjent av ${ovng.godkjentAv} ${ovng.godkjentTid}">
+                            <button class='btn btn-success btn-sm active'
+                                    title="Godkjent av ${ovng.godkjentAv} ${ovng.godkjentTid}">
                                     ${ovng.ovingnr}
                             </button>
                         </c:when>

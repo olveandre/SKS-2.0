@@ -8,6 +8,7 @@ import no.hist.tdat.kontrollere.GodkjennKontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,27 +39,31 @@ public class DatabaseConnector {
     private final String leggTilBrukerSQL = "INSERT INTO brukere (mail, rettighet_id, fornavn, etternavn, passord, aktiv) VALUES (?,?,?,?,?,?)";
     private final String oppdaterBrukerSQL = "UPDATE brukere SET mail = ?, rettighet_id = ?, fornavn = ?, etternavn = ?, aktiv = ? WHERE mail = ?";
     private final String finnBrukerSQL = "SELECT * FROM brukere WHERE mail LIKE ? OR fornavn LIKE ? OR etternavn LIKE ?";
+    private final String finnLSQL = "SELECT * FROM brukere WHERE rettighet_id = 2 AND (mail LIKE ? OR fornavn LIKE ? OR etternavn LIKE ?) ";
     private final String slettBrukerSQL = "DELETE FROM brukere WHERE mail = ?";
-    private final String finnAlleDeltakereSQL = "SELECT * FROM brukere, emner_brukere WHERE brukere.mail = emner_brukere.mail AND emner_brukere.emnekode = ? AND brukere.rettighet_id = 1 AND brukere.mail != ?";
+    private final String finnAlleDeltakereSQL = "SELECT * FROM brukere, emner_brukere WHERE brukere.mail = emner_brukere.mail AND emner_brukere.emnekode = ? AND brukere.rettighet_id = 3 AND brukere.mail != ?";
     private final String endrePassordSQL = "UPDATE brukere SET passord = ? WHERE mail = ? ";
     private final String endreKoeStatusSQL = "UPDATE koe SET aapen = ? WHERE koe_id = ?";
-    private final String finnStudentSQL = "SELECT * FROM brukere WHERE rettighet_id=1 AND mail = ? OR fornavn = ? OR etternavn = ?";
+    private final String finnStudentSQL = "SELECT * FROM brukere WHERE rettighet_id=3 AND mail LIKE ? OR fornavn LIKE ? OR etternavn LIKE ?";
     private final String hentEmnerForBrukerSQL = "SELECT * FROM emner_brukere JOIN emner ON emner_brukere.emnekode = emner.emnekode WHERE mail LIKE ?";
     private final String finnAllePlasserSQL = "SELECT * FROM plassering";
     private final String oppdaterOvingSQL = "UPDATE oving_brukere SET godkjent_av = ?, godkjent_tid = ? WHERE mail = ? AND oving_id = ?";
     private final String finnOvingerSQL = "SELECT * FROM koe_gruppe, gruppe, gruppe_oving WHERE koe_gruppe.gruppe_id = gruppe.gruppe_id AND gruppe.gruppe_id = gruppe_oving.gruppe_id AND gruppe.mail = ? AND koe_gruppe.koe_id = ? AND koe_gruppe.koe_plass = ?";
     private final String finnAntBordSQL = "SELECT ant_bord FROM plassering WHERE plassering_navn = ?";
-        //Legg til I Kø
+    //Legg til I Kø
     private final String leggTilKoGruppeSQL = "INSERT INTO koe_gruppe (koe_id, gruppe_id, plassering_navn, bordnummer, info, koe_plass, tidspunkt) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
     private final String maxKoe_PlassSQL = "SELECT * FROM koe_gruppe WHERE koe_id = ? ORDER BY koe_plass DESC";
     private final String maxGruppeIdSQL = "SELECT * FROM koe_gruppe WHERE koe_id = ? ORDER BY gruppe_id DESC";
     private final String leggtilGruppeOvingSQL = "INSERT INTO gruppe_oving (gruppe_id, koe_id ,oving_id) VALUES (?, ?, ?) ";
     private final String leggTilGruppeMedlemSQL = "INSERT INTO gruppe (koe_id, gruppe_id, mail, leder) VALUES (?, ?, ?, ?)";
     private final String finnOvingIDSQL = "SELECT * FROM oving WHERE oving_nr = ? AND emnekode = ? AND delemne_nr = ?";
-        //Admin Emne
+    //Admin Emne
     private final String finnEmneSQL = "SELECT * FROM emner WHERE emnekode LIKE ? OR emnenavn LIKE ?";
     private final String slettEmneSQL = "DELETE FROM emner WHERE emnekode = ?";
     private final String oppdaterEmneSQL = "UPDATE emner SET emnekode = ?, emnenavn = ? WHERE emnekode = ?";
+    private final String hentForelesereSQL = "SELECT * FROM emner_brukere WHERE emnekode = ? AND foreleser = 1";
+    private final String hentEmneNavnSQL = "SELECT * FROM emner WHERE emnekode = ?";
+    private final String slettEmneAnsvSQL = "DELETE FROM emner_brukere WHERE emnekode = ? AND mail = ?";
 
     private final String finnDelEmneSQL = "SELECT * FROM delemne WHERE koe_id LIKE ?";
     private final String hentKoeObjektSQL = "SELECT * FROM koe WHERE koe_id LIKE ? ";
@@ -76,6 +81,7 @@ public class DatabaseConnector {
     private final String hentDelemneSQL = "SELECT * FROM delemne WHERE delemnenavn LIKE ?";
     private final String opprettOvingSQL = "INSERT INTO oving (oving_nr, emnekode, delemne_nr) VALUES (?,?,?)";
     private final String lagReglerSQL = "UPDATE delemne SET ovingsregler = ?, ant_ovinger = ? WHERE delemne_nr = ?";
+    private final String slettDelEmne = "DELETE FROM delemne WHERE emnekode = ? AND delemne_nr = ?";
 
     //Brukes til å godkjenn gruppe hent bruker shiiet
     private final String opprettGodkjentOvingSQL = "INSERT INTO oving_brukere (oving_id, mail, godkjent_av, godkjent_tid) VALUE (?,?,?,?)";
@@ -126,8 +132,8 @@ public class DatabaseConnector {
                 godkjentAvMail, datoGodkjent);
         return true;
     }
+
     /**
-     *
      * @param mail
      * @param koe_id
      * @param koe_plass
@@ -263,7 +269,6 @@ public class DatabaseConnector {
     }
 
     /**
-     *
      * @param mail
      * @param oving_id
      * @param godkjentAvMail
@@ -368,7 +373,7 @@ public class DatabaseConnector {
 
     }
 
-    public boolean slettKoeGruppe(int koeId, int gruppeId)  {
+    public boolean slettKoeGruppe(int koeId, int gruppeId) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         int num = con.update(fjernKoeGruppeFraKoeSQL, koeId, gruppeId);
         return num > 0;
@@ -509,7 +514,18 @@ public class DatabaseConnector {
         }
         return true;
     }
-
+    public boolean slettEmneansvarlig(String emneKode,String mail){
+        if (mail == null || emneKode == null) {
+            return false;
+        }
+        JdbcTemplate con = new JdbcTemplate(dataKilde);
+        try {
+            con.update(slettEmneAnsvSQL, emneKode, mail);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
     /**
      * Fjerner tilgang til emne
      *
@@ -588,12 +604,12 @@ public class DatabaseConnector {
             return false;
         }
         System.out.println(
-                "Ko_id: " +  koeGruppe.getKoe_id() + ", " +
-                "Max_gruppe: " + finnMaxGruppeId(koeGruppe.getKoe_id()) + ", " +
-                "Sitteplass: " + koeGruppe.getSitteplass() + ", " +
-                "Bordnr: " + koeGruppe.getBordnr() +", " +
-                "Kommentar: " + koeGruppe.getKommentar() + ", " +
-                "Max_plass: " + finnMaxKoe_plass(koeGruppe.getKoe_id()));
+                "Ko_id: " + koeGruppe.getKoe_id() + ", " +
+                        "Max_gruppe: " + finnMaxGruppeId(koeGruppe.getKoe_id()) + ", " +
+                        "Sitteplass: " + koeGruppe.getSitteplass() + ", " +
+                        "Bordnr: " + koeGruppe.getBordnr() + ", " +
+                        "Kommentar: " + koeGruppe.getKommentar() + ", " +
+                        "Max_plass: " + finnMaxKoe_plass(koeGruppe.getKoe_id()));
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         con.update(
                 leggTilKoGruppeSQL,                                   //koe_id, gruppe_id, plassering_navn, bordnummer, info, koe_plass, tidspunkt
@@ -606,25 +622,28 @@ public class DatabaseConnector {
         );
         return true;
     }
-    public int finnMaxKoe_plass(int koe_id){
+
+    public int finnMaxKoe_plass(int koe_id) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<KoeGrupper> list = con.query(
                 maxKoe_PlassSQL,
                 new KoeGruppeKoordinerer(),
                 koe_id
         );
-        return (list.get(0).getKoePlassering()+1);
+        return (list.get(0).getKoePlassering() + 1);
     }
-    public int finnMaxGruppeId(int koe_id){
+
+    public int finnMaxGruppeId(int koe_id) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<KoeGrupper> list = con.query(
                 maxGruppeIdSQL,
                 new KoeGruppeKoordinerer(),
                 koe_id
         );
-        return (list.get(0).getKoePlassering()+1);
+        return (list.get(0).getKoePlassering() + 1);
     }
-    public int finnOving_id(int oving_nr, String emnekode, int delemne_nr){    //oving_nr, emnekode, delemne_nr
+
+    public int finnOving_id(int oving_nr, String emnekode, int delemne_nr) {    //oving_nr, emnekode, delemne_nr
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<Oving> list = con.query(
                 finnOvingIDSQL,
@@ -635,39 +654,38 @@ public class DatabaseConnector {
         );
         return (list.get(0).getOvingid());
     }
+
     /**
-     *
      * @param gruppe_id
      * @param mail
      * @param leder
      * @return
      */
-    public boolean leggTilGruppeMedlem(int koe_id,int gruppe_id, String mail, int leder){           //koe_id,  gruppe_id, mail, leder(0 elr 1)
+    public boolean leggTilGruppeMedlem(int koe_id, int gruppe_id, String mail, int leder) {           //koe_id,  gruppe_id, mail, leder(0 elr 1)
         System.out.println(
-                "Ko_id: " +  koe_id + ", " +
-                        "GruppeID: " + gruppe_id + ", "  +
+                "Ko_id: " + koe_id + ", " +
+                        "GruppeID: " + gruppe_id + ", " +
                         "Mail: " + mail + ", " +
                         "Leder: " + leder + "");
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         con.update(leggTilGruppeMedlemSQL,
-                    koe_id,
-                    gruppe_id,
-                    mail,
-                    leder);
+                koe_id,
+                gruppe_id,
+                mail,
+                leder);
         return true;
     }
 
     /**
-     *
      * @param gruppe_id
      * @param koe_id
      * @param oving_id
      * @return
      */
-    public boolean leggTilGruppeOving(int gruppe_id, int koe_id, int oving_id){      //gruppe_id, koe_id ,oving_id
+    public boolean leggTilGruppeOving(int gruppe_id, int koe_id, int oving_id) {      //gruppe_id, koe_id ,oving_id
         System.out.println(
-                "Ko_id: " +  koe_id + ", " +
-                        "GruppeID: " + gruppe_id + ", "  +
+                "Ko_id: " + koe_id + ", " +
+                        "GruppeID: " + gruppe_id + ", " +
                         "ØvingID: " + oving_id);
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         con.update(leggtilGruppeOvingSQL,
@@ -678,11 +696,10 @@ public class DatabaseConnector {
     }
 
     /**
-     *
      * @param koe_id
      * @return
      */
-    public DelEmne getKoeObjekt(int koe_id){
+    public DelEmne getKoeObjekt(int koe_id) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<DelEmne> delEmne = con.query(hentKoeObjektSQL, new KoestatusDelEmneKoordinerer(), koe_id);
         return delEmne.get(0);
@@ -694,7 +711,7 @@ public class DatabaseConnector {
      * @param mail id-mail og emnekode og delemne
      * @return boolean
      */
-    public boolean settStudass(String emnenavn,String mail) {
+    public boolean settStudass(String emnenavn, String mail) {
         if (mail == null || emnenavn == null) {
             return false;
         }
@@ -717,8 +734,7 @@ public class DatabaseConnector {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         try {
             con.update(fjernStudassSQL, mail, navn, navn);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -736,13 +752,14 @@ public class DatabaseConnector {
         return emne.get(0);
     }
 
-     /**
+    /**
      * Oppretter et emne
+     * <p/>
+     * <<<<<<< HEAD
+     * =======
+     * Oppretter et emne
+     * >>>>>>> d5dfd37cb7e5e6713bbca8edb8130281dca855ff
      *
-<<<<<<< HEAD
-=======
-     *Oppretter et emne
->>>>>>> d5dfd37cb7e5e6713bbca8edb8130281dca855ff
      * @param emne
      * @return boolean
      * @throws org.springframework.dao.DuplicateKeyException
@@ -775,10 +792,10 @@ public class DatabaseConnector {
         return true;
     }
 
-    public Koe delemneIKoe(){
+    public Koe delemneIKoe() {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
-        con.update(delemneIKoeSQL,0);
-        List <Koe> alle = con.query(hentSisteKoeSQL, new KoeKoordinator());
+        con.update(delemneIKoeSQL, 0);
+        List<Koe> alle = con.query(hentSisteKoeSQL, new KoeKoordinator());
         ArrayList<Koe> res = new ArrayList<Koe>();
         for (Koe koe : alle) {
             res.add(koe);
@@ -788,13 +805,14 @@ public class DatabaseConnector {
 
     /**
      * Author Thomas
+     *
      * @param delemne_nr
      * @param emnekode
      * @return
      */
-    public ArrayList<Oving> hentDelEmneOving(int delemne_nr, String emnekode){
+    public ArrayList<Oving> hentDelEmneOving(int delemne_nr, String emnekode) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
-        List<Oving> alle = con.query(hentDelEmneOvingSQL, new OvingKoordinerer(),emnekode ,delemne_nr);
+        List<Oving> alle = con.query(hentDelEmneOvingSQL, new OvingKoordinerer(), emnekode, delemne_nr);
         ArrayList<Oving> res = new ArrayList<Oving>();
         for (Oving oving : alle) {
             res.add(oving);
@@ -818,13 +836,13 @@ public class DatabaseConnector {
     }
 
     /**
-<<<<<<< HEAD
+     * <<<<<<< HEAD
      * Henter alle �vinger til en student i et delemne
+     *
      * @param navn, epost
-=======
-     * Henter alle �vinger til en student i et delemne
-     * @param navn
->>>>>>> 717f5655302668a2e1996e1e59354d8931d6383a
+     *              =======
+     *              Henter alle �vinger til en student i et delemne
+     * @param navn  >>>>>>> 717f5655302668a2e1996e1e59354d8931d6383a
      * @return tab over alle treff
      */
     public ArrayList<Oving> hentOvinger(String navn) {
@@ -839,12 +857,27 @@ public class DatabaseConnector {
 
     /**
      * Henter emne, gitt navn p� delemne
+     *
      * @param navn
      * @return emnet
      */
     public Emne hentEmne(String navn) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<Emne> emne = con.query(hentEmneSQL, new EmneKoordinerer(), navn);
+        return emne.get(0);
+    }
+
+    public Emne hentEmneNavn(String emnekode) {
+        JdbcTemplate con = new JdbcTemplate(dataKilde);
+        List<Emne> emne = con.query(hentEmneNavnSQL, new EmneKoordinerer(), emnekode);
+        List<Bruker> forelesereList = con.query(hentForelesereSQL, new MailBrukerKoordinerer(), emne.get(0).getEmneKode());
+        ArrayList<Bruker> forelesere = new ArrayList<>();
+        if (forelesereList != null) {
+            for (int j = 0; forelesereList.size() > j; j++) {
+                forelesere.add(hentBruker(forelesereList.get(j).getMail()).get(0));
+            }
+            emne.get(0).setForeleserListe(forelesere);
+        }
         return emne.get(0);
     }
 
@@ -860,22 +893,33 @@ public class DatabaseConnector {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         List<Emne> emnerList = con.query(finnEmneSQL, new EmneKoordinerer(), input, input);
         ArrayList<Emne> res = new ArrayList<>();
-
-        for (Emne emner : emnerList) {
+        Emne emner = new Emne();
+        for (int i = 0; i < emnerList.size(); i++) {
+            List<Bruker> forelesereList = con.query(hentForelesereSQL, new MailBrukerKoordinerer(), emnerList.get(i).getEmneKode());
+            ArrayList<Bruker> forelesere = new ArrayList<>();
+            if (forelesereList != null) {
+                for (int j = 0; forelesereList.size() > j; j++) {
+                    forelesere.add(hentBruker(forelesereList.get(j).getMail()).get(0));
+                }
+                emnerList.get(i).setForeleserListe(forelesere);
+            }
+            emner = emnerList.get(i);
             res.add(emner);
         }
         return res;
     }
-    public boolean slettEmne(String emnekode){
-        if(emnekode==null){
+
+    public boolean slettEmne(String emnekode) {
+        if (emnekode == null) {
             return false;
         }
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         con.update(slettEmneSQL, emnekode);
         return true;
     }
-    public boolean oppdaterEmne(Emne emne, String emnekode){
-        if(emne==null || emnekode==null){
+
+    public boolean oppdaterEmne(Emne emne, String emnekode) {
+        if (emne == null || emnekode == null) {
             return false;
         }
         JdbcTemplate con = new JdbcTemplate(dataKilde);
@@ -885,10 +929,11 @@ public class DatabaseConnector {
                 emnekode);
         return true;
     }
+
     public boolean opprettOving(int i, DelEmne delemne) {
         JdbcTemplate con = new JdbcTemplate(dataKilde);
         con.update(opprettOvingSQL,
-                i+1,
+                i + 1,
                 delemne.getEmneKode(),
                 delemne.getNr());
         return true;
@@ -902,9 +947,9 @@ public class DatabaseConnector {
                 delemne.getNr());
         return true;
     }
-
     /**
      * Henter emne, gitt navn p� delemne
+     *
      * @param epost, emne
      * @return �vinger
      */
@@ -918,4 +963,32 @@ public class DatabaseConnector {
         }
         return res;
     }
+
+    public ArrayList<Bruker> finnL(String sok) {
+        if (sok == null) {
+            return null;
+        }
+        String input = "%";
+        input += sok + "%";
+        JdbcTemplate con = new JdbcTemplate(dataKilde);
+        List<Bruker> brukerList = con.query(finnLSQL, new BrukerKoordinerer(), input, input, input);
+        ArrayList<Bruker> res = new ArrayList<>();
+
+        for (Bruker bruker : brukerList) {
+            res.add(bruker);
+        }
+        return res;
+    }
+
+
+    public boolean slettDelEmne(String emnekode, String delEmneNr){
+        if (emnekode == null || delEmneNr==null){
+            return false;
+        }
+        JdbcTemplate con = new JdbcTemplate(dataKilde);
+        int num = con.update(slettDelEmne, emnekode, delEmneNr);
+        return num > 0;
+
+    }
+
 }

@@ -42,8 +42,7 @@
                 <td>
                     <div class="btn-group" id="<c:out value="${koegrupper.gruppeID}"/>">
                         <c:if test="${sessionScope.innloggetBruker.rettighet<3}">
-                            <button class="btn btn-primary" data-task="choose" title="Velg" id="${koegrupper.koe_id}:${koegrupper.gruppeID}"
-                                    onclick="velgGruppeFraKoe(this.id)"><i class="glyphicon glyphicon-edit"></i>
+                            <button class="btn btn-primary" data-task="choose" title="Velg" onclick="velgGruppeFraKoe(${koegrupper.koe_id},${koegrupper.gruppeID})"><i class="glyphicon glyphicon-edit"></i>
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.innloggetBruker.rettighet==3 && koegrupper.medlemmer[0].equals(sessionScope.innloggetBruker)}">

@@ -39,7 +39,7 @@ public class LoginKontroller {
         try{
         emneService.hentEmner(bruker);  //Henter emner,
         }catch (NullPointerException ne){
-            System.out.println("Nullpointer ved login: "+ne);
+            System.out.println("Nullpointer ved login: \n"+ne);
         }
         /*for (int i = 0; i < bruker.getEmne().size(); i++) {
             //System.out.println(bruker.getEmne().get(i).getEmneNavn());

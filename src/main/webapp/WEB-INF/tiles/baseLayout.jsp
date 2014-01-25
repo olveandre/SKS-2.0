@@ -6,7 +6,10 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><tiles:insertAttribute name="title" ignore="true"/></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<c:url value="/resources/css/bootstrap.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/sb-admin.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/signin.css"/>" rel="stylesheet">

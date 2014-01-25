@@ -11,7 +11,9 @@
                 <th>#</th>
                 <th>Emnekode</th>
                 <th>Emnenavn</th>
-                <th>&Oslash;vingsoversikt</th>
+                <c:if test="${sessionScope.innloggetBruker.rettighet == 3}">
+                    <th>&Oslash;vingsoversikt</th>
+                </c:if>
             </tr>
             </thead>
             <tbody>
@@ -27,4 +29,5 @@
 </div>
 </div>
 <script src="<c:url value="/resources/js/koen.js"/>"></script>
+<script src="<c:url value="/resources/js/menyScript.js"/>"></script>
 

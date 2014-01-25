@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <h1>Endre student</h1>
-<form:form action="videresend" method="post">
+<form:form action="endreValgtStudent" method="post">
     <input type="submit" class="btn btn-warning" value="Tilbake" name="tilbake"/>
 </form:form>
 <table class="table table-condensed table-hover" id="minTable">
@@ -13,18 +13,15 @@
         <th class="header">Epost</th>
     </tr>
     </thead>
-
     <tbody>
-    <tr>
-        <td><c:out value="${sessionScope.valgtPerson.fornavn}"/></td>
-        <td><c:out value="${sessionScope.valgtPerson.etternavn}"/></td>
-        <td><c:out value="${sessionScope.valgtPerson.mail}"/></td>
-    </tr>
+        <tr>
+            <td><c:out value="${sessionScope.valgtPerson.fornavn}"/></td>
+            <td><c:out value="${sessionScope.valgtPerson.etternavn}"/></td>
+            <td><c:out value="${sessionScope.valgtPerson.mail}"/></td>
+        </tr>
     </tbody>
 </table>
-
 <hr>
-
 <div class="text-info">
     <h3><c:out value="${forrigeOp}"/></h3>
 </div>

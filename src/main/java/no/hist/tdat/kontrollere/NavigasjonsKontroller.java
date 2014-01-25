@@ -65,10 +65,13 @@ public class NavigasjonsKontroller {
         return "adminFag";
     }
     @RequestMapping("/adminEmneEndre.htm")
-    public String omdirigerAdminEmneEndre(@ModelAttribute ("emne") Emne emne, @ModelAttribute("emnerBeans") EmnerBeans emnerBeans) {
+    public String omdirigerAdminEmneEndre(@ModelAttribute ("emne") Emne emne, @ModelAttribute("delemne") DelEmne delemne,@ModelAttribute("emnerBeans") EmnerBeans emnerBeans) {
         return "adminEmneEndre";
     }
-
+    @RequestMapping("/leggTilEmneAnsView.htm")
+    public String omdirigerEmneLeggTilEmneAns(@ModelAttribute ("emne") Emne emne, @ModelAttribute("delemne") DelEmne delemne,@ModelAttribute("emnerBeans") EmnerBeans emnerBeans) {
+        return "leggTilEmneAnsView";
+    }
     @RequestMapping(value = "/koOversikt.htm", method = RequestMethod.POST)
     public String koOversikt(@ModelAttribute("delEmne") DelEmne delEmne, HttpServletRequest request, HttpSession session, Model model) {
         int delemneNr = Integer.parseInt(request.getParameter("delemneNr"));    //Index i bruker-objektet, IKKE i DB
@@ -97,12 +100,12 @@ public class NavigasjonsKontroller {
 
         return koeservice.genererStartStopKnapp((DelEmne)session.getAttribute("delEmne"));
     }
-
     @RequestMapping(value="/oppdaterKoe.htm", method = RequestMethod.POST)
     @ResponseBody
     public String oppdaterKoe(@ModelAttribute("delEmne") DelEmne delEmne,HttpServletRequest request,HttpSession session, Model model) {
         innloggetBruker = (Bruker) session.getAttribute("innloggetBruker");
         Koe koe = (Koe)session.getAttribute("koe");
+
        // System.out.println("wtf");
         //int koeId = (int)request.getAttribute("koe_id");
         koe.setGrupper(koeservice.getKoe(koe.getKoeId()));
@@ -122,7 +125,6 @@ public class NavigasjonsKontroller {
         int delemneNr = Integer.parseInt(request.getParameter("delemneNr"));    //Index i bruker-objektet, IKKE i DB
         int emnenr = Integer.parseInt(request.getParameter("emneNr"));          //Index i bruker-objektet, IKKE i DB
         innloggetBruker = (Bruker) session.getAttribute("innloggetBruker");
-
 
         Emne emne = innloggetBruker.getEmne().get(emnenr);
         delEmne = emne.getDelemner().get(delemneNr);

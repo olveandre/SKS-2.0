@@ -27,15 +27,15 @@ public class OvingsoppleggetKontroller {
         String tot = req.getParameter("antall");
         String min = req.getParameter("min");
         String text = req.getParameter("newText");
-        String regler = tot+" "+min+" / "+text;
+        String regler = tot+" "+min+" | "+text;
         try{
             for (int i = 0; i < antall; i++) {
                 service.opprettOving(i, delemne);
                 ant++;
             }
             service.lagRegler(regler, ant, delemne);
-            model.addAttribute("ovingsregel", "Øvingsregel opprettet");
-            return "index";
+            model.addAttribute("Vellykket", "Øvingsregel opprettet i delemnet " + delemne.getDelEmneNavn());
+            return "adminEmneEndre";
         }catch(org.springframework.dao.DuplicateKeyException e){
             model.addAttribute("delemneSQLfeil", "Delemnenavn eller delemnekode er opprettet fra f&oslash;r");
             return "ovingsopplegget";

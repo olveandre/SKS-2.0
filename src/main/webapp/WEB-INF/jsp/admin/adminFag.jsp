@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<div class="col-md-8">
+<div class="col-lg-10">
     <ul class="nav nav-tabs nav-justified">
         <li id="lenkeEndre" class="active"><a href="#endre" data-toggle="tab">Adm. Emne</a></li>
         <li id="lenkeleggTilEnkelEmne"><a href="#leggTilEmne" data-toggle="tab">Legg til Emne</a></li>
@@ -27,12 +27,14 @@
                     </button>
                 </div>
             </div>
+            <p style="color: red">${message}</p>
             <div class="span5">
                 <table class="table table-condensed table-hover" id="minTable">
                     <thead>
                     <tr>
-                        <th class="header">Emnekode</th>
-                        <th class="header">Emnenavn</th>
+                        <th class="header col-sm-2">Emnekode</th>
+                        <th class="header col-sm-4">Emnenavn</th>
+                        <th class="header">Emneansvarlig</th>
                         <th class="header col-sm-1"></th>
                     </tr>
                     </thead>
@@ -43,6 +45,7 @@
                         <tr>
                             <td><c:out value="${emne.emneKode}"/></td>
                             <td><c:out value="${emne.emneNavn}"/></td>
+                            <td><c:out value="${emne.forelesereTilString()}"/></td>
                             <td>
                                 <div class="input-group-btn">
                                     <button type="edit" class="btn btn-warning btn-sm" data-toggle="modal"

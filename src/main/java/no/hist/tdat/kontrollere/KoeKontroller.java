@@ -119,6 +119,7 @@ public class KoeKontroller {
             ovingString = "Øving " + koegrupper.getOvingnr().get(i) + ", ";
         }
         koe_service.leggTilIKo(koegrupper, delEmne, ovingString);
+        model.addAttribute("Vellykket", "Vellykket!");
         return "settIKo";
     }
 }

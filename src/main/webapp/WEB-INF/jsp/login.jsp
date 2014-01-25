@@ -16,7 +16,6 @@
 </head>
 <body>
 <div class="container">
-
     <form:form action="loggerinn.SSL" method="POST"  modelAttribute="bruker" class="form-signin">
         <h2 class="form-signin-heading" id="header">Logg inn</h2>
         <p style="color: green;"><strong>${nyPassord}</strong></p>

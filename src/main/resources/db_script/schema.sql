@@ -113,10 +113,16 @@ CREATE TABLE oving_brukere (
 
 ALTER TABLE brukere ADD CONSTRAINT brukere_fk1 FOREIGN KEY (rettighet_id) REFERENCES rettighet (rettighet_id);
 
-ALTER TABLE delemne ADD CONSTRAINT delemne_fk1 FOREIGN KEY (emnekode) REFERENCES emner (emnekode);
-ALTER TABLE delemne ADD CONSTRAINT delemne_fk2 FOREIGN KEY (koe_id) REFERENCES koe (koe_id);
+ALTER TABLE delemne ADD CONSTRAINT delemne_fk1 FOREIGN KEY (emnekode) REFERENCES emner (emnekode)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+ALTER TABLE delemne ADD CONSTRAINT delemne_fk2 FOREIGN KEY (koe_id) REFERENCES koe (koe_id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
-ALTER TABLE oving ADD CONSTRAINT oving_fk1 FOREIGN KEY (delemne_nr, emnekode) REFERENCES delemne (delemne_nr, emnekode);
+ALTER TABLE oving ADD CONSTRAINT oving_fk1 FOREIGN KEY (delemne_nr, emnekode) REFERENCES delemne (delemne_nr, emnekode)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
 ALTER TABLE emner_brukere ADD CONSTRAINT emner_brukere_fk1 FOREIGN KEY (emnekode) REFERENCES emner (emnekode)
   ON DELETE CASCADE
@@ -125,7 +131,9 @@ ALTER TABLE emner_brukere ADD CONSTRAINT emner_brukere_fk2 FOREIGN KEY (mail) RE
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-ALTER TABLE oving_brukere ADD CONSTRAINT oving_brukere_fk1 FOREIGN KEY (oving_id) REFERENCES oving (oving_id);
+ALTER TABLE oving_brukere ADD CONSTRAINT oving_brukere_fk1 FOREIGN KEY (oving_id) REFERENCES oving (oving_id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 ALTER TABLE oving_brukere ADD CONSTRAINT oving_brukere_fk2 FOREIGN KEY (mail) REFERENCES brukere (mail)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
@@ -137,7 +145,9 @@ ALTER TABLE delemne_brukere ADD CONSTRAINT delemne_brukere_fk2 FOREIGN KEY (dele
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-ALTER TABLE koe_gruppe ADD CONSTRAINT koe_gruppe_fk1 FOREIGN KEY (koe_id) REFERENCES koe (koe_id);
+ALTER TABLE koe_gruppe ADD CONSTRAINT koe_gruppe_fk1 FOREIGN KEY (koe_id) REFERENCES koe (koe_id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 ALTER TABLE koe_gruppe ADD CONSTRAINT koe_gruppe_fk2 FOREIGN KEY (plassering_navn) REFERENCES plassering (plassering_navn)
   ON DELETE CASCADE
   ON UPDATE CASCADE;

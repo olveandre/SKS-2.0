@@ -11,17 +11,13 @@
             xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
         xmlhttp.onreadystatechange = function () {
-
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                window.location = "endreValgtStudent";
+            }
         }
         xmlhttp.open("POST", "endreValgtBruker", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("brukerIndex=" + mail);
-
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            //document.getElementById("calendar").innerHTML=xmlhttp.responseText;
-            alert("jara");
-        }
-        window.location = "videresend";
+        xmlhttp.send("brukerIndex="+mail);
     }
 </script>
 
@@ -62,7 +58,7 @@
                     <td><c:out value="${bruker.mail}"/></td>
                     <td>
                         <div class="input-group-btn">
-                            <button type="submit" class="btn btn-warning btn-sm" id="${bruker.mail}"
+                            <button type="button" class="btn btn-warning btn-sm" id="${bruker.mail}"
                                    data-toggle="modal" onclick="finnRettBruker(this.id)"
                                    data-target="#endrebrukerModal" value="Endre" title="Endre">
                             <i class="glyphicon glyphicon-edit"></i></button>

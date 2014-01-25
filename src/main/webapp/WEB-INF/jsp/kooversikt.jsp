@@ -15,12 +15,12 @@
         <div id="operasjonstekst">
             K&oslash; for <c:out value="${delEmne.delEmneNavn}"/>
         </div>
-        <div id="koeStatus">
+        <div id="koeStatus" style="float: right">
             <c:if test="${delEmne.koe_status}">
-                Aktivert
+                <p style="color: green">(Aktivert)</p>
             </c:if>
             <c:if test="${!delEmne.koe_status}">
-                Deaktivert
+                <p style="color: red">(Deaktivert)</p>
             </c:if>
         </div>
     </h3>

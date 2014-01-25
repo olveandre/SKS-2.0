@@ -57,7 +57,8 @@
                 class="glyphicon glyphicon-plus"></i> Endre øvinger
         </button>
 
-        <button type="submit" class="btn btn-danger" name="tilbakeKnapp">Lukk</button>
+        <button type="tilbake" class="btn btn-danger" name="tilbakeKnapp">Tilbake</button>
+
     </div>
         <div class="modal fade" id="leggTilStudentModal" tabindex="-1" role="dialog" aria-labelledby="leggTilStudent"
              aria-hidden="true">

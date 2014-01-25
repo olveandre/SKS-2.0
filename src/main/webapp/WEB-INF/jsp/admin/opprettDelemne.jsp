@@ -1,4 +1,6 @@
+<%@ page import="no.hist.tdat.javabeans.Emne" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Eirik
@@ -7,15 +9,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div class="col-md-6">
+    <p style="color: green"><strong>${emnerett}</strong></p>
 
+    <h3>Legg til delemne for emnet  <strong>${redigerEmne.emneNavn}</strong></h3>
 
-<div class="col-md-4">
     <form:form method="POST" modelAttribute="delemne" action="lagDelemne">
-        <h2>Opprett delemne</h2>
-
-        <p style="color: green"><strong>${emnerett}</strong></p>
 
         <p style="color: red"><strong>${delemnefeil}</strong></p>
+
         <p style="color: red"><strong>${delemneSQLfeil}</strong></p>
 
         <div class="form-group">

@@ -1,5 +1,5 @@
 /*
-    AdminFag
+ AdminFag
  */
 
 function adminFagOperasjon(valgt) {
@@ -24,9 +24,8 @@ function endreEmne(valgt) {
 }
 
 
-function slettEmne(valgt)
-{
-    if(typeof(valgt) == "object"){
+function slettEmne(valgt) {
+    if (typeof(valgt) == "object") {
         $(valgt).closest("tr").remove();
         alert("Slett emne?")
     } else {
@@ -37,7 +36,110 @@ function slettEmne(valgt)
 
 function slettEmneFraKnapp(emnekode) {
     var svar = confirm("Slette emnet " + emnekode + "?");
-    if(svar){
+    if (svar) {
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                window.location = "searchFag.htm"
+
+            }
+        }
+        xmlhttp.open("POST", "/slettEmne.htm", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("emneIndex=" + emnekode);
+
+
+    }
+}
+
+function redigerEmneFraKnapp(emnekode) {
+
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            window.location = "adminEmneEndre.htm";
+
+        }
+    }
+    xmlhttp.open("POST", "/redigerEmne.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("emneIndex=" + emnekode);
+
+
+}
+
+function adminEmneTilbake(emnekode) {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            window.location = "searchFag.htm"
+        }
+    }
+    xmlhttp.open("POST", "/searchFag.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("emneIndex=" + emnekode);
+
+}
+function velgBrukerL(mail) {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            window.location = "velgBruker.htm";
+        }
+    }
+    xmlhttp.open("POST", "/velgBruker.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("brukerIndex=" + mail);
+
+
+}
+
+function visLeggTilEmneansv(emnekode) {
+
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        }
+    }
+    xmlhttp.open("POST", "/redigerEmne.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("emneIndex=" + emnekode);
+    window.location = "/leggTilEmneAnsView.htm";
+
+}
+function leggTilEmneansvarlig(mail, emneKode) {
+    if (confirm("Legge til " + mail + " som emneansvarlig?")) {
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlhttp = new XMLHttpRequest();
         }
@@ -48,19 +150,51 @@ function slettEmneFraKnapp(emnekode) {
         xmlhttp.onreadystatechange = function () {
 
         }
-        xmlhttp.open("POST", "/slettEmne.htm", true);
+        xmlhttp.open("POST", "/velgBruker.htm", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("emneIndex=" + emnekode);
-
+        xmlhttp.send("brukerIndex=" + mail + "&emneIndex=" + emneKode);
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         }
-
-        window.location = "searchFag.htm"
+        window.location = "/leggTilEmneAnsView.htm";
     }
 }
+function slettEmneansvarlig(mail, emneKode) {
+    if (confirm("Fjern " + mail + " som emneansvarlig?")) {
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
 
-function redigerEmneFraKnapp(emnekode) {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                window.location="adminEmneEndre.htm";
+            }
+        }
+        xmlhttp.open("POST", "/slettEmneAnsv.htm", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("brukerIndex=" + mail + "&emneIndex=" + emneKode);
+    }
+}
+function adminEmneEmneAnsTilbake(emnekode) {
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
 
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            window.location = "adminEmneEndre.htm";
+        }
+    }
+    xmlhttp.open("POST", "/redigerEmne.htm", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("emneIndex=" + emnekode);
+}
+function leggtilDelEmne(emnekode) {
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
     }
@@ -77,32 +211,10 @@ function redigerEmneFraKnapp(emnekode) {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     }
 
-    window.location = "adminEmneEndre.htm";
-
+    window.location = "delEmne.htm";
 }
-
-function adminEmneTilbake(emnekode) {
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function () {
-
-    }
-    xmlhttp.open("POST", "/searchFag.htm", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("emneIndex=" + emnekode);
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    }
-    window.location = "searchFag.htm"
-}
-
-
 /*
-    AdminBrukere
+ AdminBrukere
  */
 function handleFileSelect(hendelse) {
     var minFil = hendelse.target.files[0];
@@ -133,9 +245,8 @@ function endreBruker(valgt) {
 }
 
 
-function slettBruker(valgt)
-{
-    if(typeof(valgt) == "object"){
+function slettBruker(valgt) {
+    if (typeof(valgt) == "object") {
         $(valgt).closest("tr").remove();
         alert("Slett bruker?")
     } else {
@@ -145,26 +256,27 @@ function slettBruker(valgt)
 
 
 function slettBrukerFraKnapp(mail) {
+    if (confirm("Sikker på at du vil slette " + mail + "?")) {
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
 
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp = new XMLHttpRequest();
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+
+        }
+        xmlhttp.open("POST", "/slettBruker.htm", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("brukerIndex=" + mail);
+
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        }
+
+        window.location = "search.htm"
+
     }
-else {// code for IE6, IE5
-
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-xmlhttp.onreadystatechange = function () {
-
-    }
-xmlhttp.open("POST", "/slettBruker.htm", true);
-xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-xmlhttp.send("brukerIndex=" + mail);
-
-if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    }
-
-    window.location = "search.htm"
-
 
 }
 

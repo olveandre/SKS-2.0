@@ -39,6 +39,11 @@
         <put-attribute name="body" value="/WEB-INF/jsp/admin/adminBrukereEndre.jsp"/>
     </definition>
 
+    <definition name="leggTilEmneAnsView" extends="baseLayout">
+        <put-attribute name="title" value="Legg Til Emneansvarlig"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/admin/LeggTilEmneansvarlig.jsp"/>
+    </definition>
+
     <definition name="adminFag" extends="baseLayout">
         <put-attribute name="title" value="Administrer Fag"/>
         <put-attribute name="body" value="/WEB-INF/jsp/admin/adminFag.jsp"/>
@@ -103,5 +108,9 @@
     <definition name="mineFag" extends="baseLayout">
         <put-attribute name="title" value="Mine Emner"/>
         <put-attribute name="body" value="/WEB-INF/jsp/faglarer/mineFag.jsp"/>
+    </definition>
+    <definition name="visAlleMedBestatt" extends="baseLayout">
+        <put-attribute name="title" value="Studenter med nok øvinger"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/faglarer/visAlleMedBestatt.jsp"/>
     </definition>
 </tiles-definitions>

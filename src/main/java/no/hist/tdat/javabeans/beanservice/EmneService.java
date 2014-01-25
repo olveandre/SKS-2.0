@@ -116,7 +116,7 @@ public class EmneService {
      */
     public ArrayList<Emne> finnEmne(String input) {
         return databaseConnector.finnEmne(input);
-    
+    }
     public boolean slettEmne(String emnekode){
         return databaseConnector.slettEmne(emnekode);
     }

@@ -61,6 +61,7 @@ public class GodkjennKontroller {
                 detteEmne = emner.get(a);
             }
         }
+
         String emneKode = detteEmne.getEmneKode();
         ArrayList<Bruker> mangeStudenter = new ArrayList<>();
         for (int e = 0; e < brukerService.hentStudenterMedEmne(emneKode).size(); e++) {

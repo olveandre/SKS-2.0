@@ -57,7 +57,7 @@
                 class="glyphicon glyphicon-plus"></i> Endre øvinger
         </button>
 
-        <button type="tilbake" class="btn btn-danger" name="tilbakeKnapp">Tilbake</button>
+        <button type="submit" class="btn btn-danger" name="tilbakeKnapp">Tilbake</button>
 
     </div>
         <div class="modal fade" id="leggTilStudentModal" tabindex="-1" role="dialog" aria-labelledby="leggTilStudent"
@@ -70,7 +70,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="btn-group">
-                            <select class="form-control" name="dropdown" id="leggTilStudentIGruppe">
+                            <select class="form-control" name="dropdownMedStudenter" id="leggTilStudentIGruppe">
 
                                 <option value="ingenValgte">Ingen valgte</option>
                                 <c:forEach var="brukerValgt" items="${flereStudenter}" varStatus="status">
@@ -88,7 +88,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="leggTilBrukere" items="" varStatus="status">
+                                <c:forEach var="brukerValgt" items="flereStudenter.valgt" varStatus="status">
                                 <tr>
                                     <td><c:out value="${leggTilBrukere.fornavn}"></c:out> </td>
                                     <td><c:out value="${leggTilBrukere.etternavn}"></c:out> </td>
